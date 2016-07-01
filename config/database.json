@@ -1,0 +1,41 @@
+{
+    "connection1": {
+        "name": "",
+        "database": "",
+        "username": "",
+        "password": "",
+        "host": "mistralwebs.cloudapp.net",
+        "dialect": "mysql",
+        "pool": {
+            "max": 5,
+            "min": 0,
+            "idle": 10000
+        }
+    },
+    "connection2": {
+        "name": "",
+        "database": "",
+        "username": "",
+        "password": "",
+        "host": "mistralwebs.cloudapp.net",
+        "dialect": "postgres",
+        "pool": {
+            "max": 5,
+            "min": 0,
+            "idle": 10000
+        }
+    },
+    "connection3": {
+        "name": "",
+        "database": "",
+        "username": "",
+        "password": "",
+        "host": "mistralwebs.cloudapp.net",
+        "dialect": "mssql",
+        "pool": {
+            "max": 5,
+            "min": 0,
+            "idle": 10000
+        }
+    }
+}

@@ -5,6 +5,8 @@ gulp.task('default', function() {
   // place code for your default task here
   return gulp.src([
       './controllers/init.js',
+      './models/init.js',
+      './models/user.js',
       './controllers/module.js',
       './controllers/router.js',
       './controllers/file.js',

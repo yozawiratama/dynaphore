@@ -1,0 +1,12 @@
+{
+    "default" : {
+        "path" : "/",
+        "module" : "home",
+        "action" : "landing" 
+    },
+    "login" : {
+        "path" : "/login",
+        "module" : "user",
+        "action" : "login"
+    }
+}
