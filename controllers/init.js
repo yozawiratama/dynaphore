@@ -11,5 +11,11 @@ var module_holder = {};
 console.log('Initialize Router');
 var router = Router();
 
+var layout = {
+    info : {},
+    path : '',
+    view : ''
+};
+
 
 
