@@ -1,20 +1,19 @@
-function LoadModules(path) {
+function LoadModules(path, moduleid) {
     fs.lstat(path, function (err, stat) {
-        console.log(stat.isDirectory());
         if (stat.isDirectory()) {
             // we have a directory: do a tree walk
             fs.readdir(path, function (err, files) {
                 var f, l = files.length;
                 for (var i = 0; i < l; i++) {
                     f = path_module.join(path, files[i]);
+                    LoadModules(f, moduleid);
 
-                    if (path_module.extname(f) == '.js')
-                        LoadModules(f);
                 }
             });
         } else {
             // we have a file: load it
-            require(path)(module_holder);
+            if (path_module.extname(path) == '.js')
+                require(path)(module_holder, moduleid);
         }
     });
 }
@@ -27,8 +26,17 @@ function getDirectories(srcpath) {
 
 var module_directories = getDirectories(path_module.join(__dirname, 'modules'));
 for (d in module_directories) {
+
     var DIR = path_module.join(__dirname, 'modules', module_directories[d]);
-    LoadModules(DIR);
+    console.log(DIR);
+    var modjson = path_module.join(__dirname, 'modules', module_directories[d], 'module.json');
+    var moduleid = '';
+    // console.log(fs.readFileSync(modjson, 'utf8'));
+    var jdata = JSON.parse(fs.readFileSync(modjson, 'utf8'));
+    module_holder[jdata.id] = jdata;
+    module_holder[jdata.id]['view'] = {};
+    LoadModules(DIR, jdata.id);
+
 }
 
 exports.module_holder = module_holder;

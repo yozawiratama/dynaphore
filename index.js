@@ -1,3 +1,4 @@
+console.log('Getting Start ...');
 var finalhandler = require('finalhandler')
 var http         = require('http')
 var url          = require('url')
@@ -5,7 +6,9 @@ var Router       = require('router')
 var path_module = require('path');
 var fs = require('fs');
 
+console.log('Initialize Module');
 var module_holder = {}; 
+console.log('Initialize Router');
 var router = Router();
 
 
@@ -33,23 +36,22 @@ sequelize
         console.log('Unable to connect to the database:', err);
     });
 
-function LoadModules(path) {
+function LoadModules(path, moduleid) {
     fs.lstat(path, function (err, stat) {
-        console.log(stat.isDirectory());
         if (stat.isDirectory()) {
             // we have a directory: do a tree walk
             fs.readdir(path, function (err, files) {
                 var f, l = files.length;
                 for (var i = 0; i < l; i++) {
                     f = path_module.join(path, files[i]);
+                    LoadModules(f, moduleid);
 
-                    if (path_module.extname(f) == '.js')
-                        LoadModules(f);
                 }
             });
         } else {
             // we have a file: load it
-            require(path)(module_holder);
+            if (path_module.extname(path) == '.js')
+                require(path)(module_holder, moduleid);
         }
     });
 }
@@ -62,15 +64,20 @@ function getDirectories(srcpath) {
 
 var module_directories = getDirectories(path_module.join(__dirname, 'modules'));
 for (d in module_directories) {
+
     var DIR = path_module.join(__dirname, 'modules', module_directories[d]);
-    LoadModules(DIR);
+    console.log(DIR);
+    var modjson = path_module.join(__dirname, 'modules', module_directories[d], 'module.json');
+    var moduleid = '';
+    // console.log(fs.readFileSync(modjson, 'utf8'));
+    var jdata = JSON.parse(fs.readFileSync(modjson, 'utf8'));
+    module_holder[jdata.id] = jdata;
+    module_holder[jdata.id]['view'] = {};
+    LoadModules(DIR, jdata.id);
+
 }
 
 exports.module_holder = module_holder;
-function getQueryString(search) {
-  console.log(search);
-  JSON.parse('{"' + decodeURI(search.replace(/&/g, "\",\"").replace(/=/g,"\":\"")) + '"}')
-}
 
 // //post
 // router.get('/:ctrl?/:act?/:param?', function (req, res) {
@@ -106,14 +113,17 @@ function getQueryString(search) {
 
 // });
 
-var server = http.createServer(function(req, res) {
+var server = http.createServer(function (req, res) {
   router(req, res, finalhandler(req, res));
   var url_parts = url.parse(req.url, true);
-var query = url_parts.query;
-console.log(query);
-console.log(url_parts);
+  var query = url_parts.query;
+  console.log(query);
+  console.log(url_parts);
+  module_holder['mod.dynaphore.user']['user.login'](req, res);
   // console.log(req.url.split('?')[1]);
   // console.log(getQueryString(req.url.split('?')[1]));
 })
- 
+
+
 server.listen(3000);
+console.log('Serve at localhost:3000');

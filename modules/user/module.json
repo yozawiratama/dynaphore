@@ -1,0 +1,6 @@
+{
+    "id" : "mod.dynaphore.user",
+    "name" : "User Module",
+    "version" : "0.0.1",
+    "description" : "module of user data"
+}
