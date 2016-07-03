@@ -32,6 +32,7 @@
     "pg-hstore": "^2.3.2",
     "router": "^1.1.4",
     "sequelize": "^3.23.4",
-    "tedious": "^1.14.0"
+    "tedious": "^1.14.0",
+    "vash": "^0.12.1"
   }
 }
