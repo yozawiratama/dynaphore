@@ -1,0 +1,19 @@
+<html>
+
+<head>
+    <title>@model.pageTitle - Dynaphore</title>
+</head>
+
+<body>
+    <h1>dynaphore</h1>
+    <div>
+        <a href="/">Home </a>
+        <a href="/login">Login </a>
+        <a href="/register">Register </a>
+        </div>
+    <div class="content">
+        @html.raw(model.body)
+    </div>
+</body>
+
+</html>

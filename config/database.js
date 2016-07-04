@@ -1,10 +1,10 @@
-{
+module.exports = {
     "connection1": {
         "name": "",
         "database": "",
         "username": "",
         "password": "",
-        "host": "mistralwebs.cloudapp.net",
+        "host": "localhost",
         "dialect": "mysql",
         "pool": {
             "max": 5,
@@ -17,7 +17,7 @@
         "database": "",
         "username": "",
         "password": "",
-        "host": "mistralwebs.cloudapp.net",
+        "host": "localhost",
         "dialect": "postgres",
         "pool": {
             "max": 5,
@@ -30,7 +30,7 @@
         "database": "",
         "username": "",
         "password": "",
-        "host": "mistralwebs.cloudapp.net",
+        "host": "localhost",
         "dialect": "mssql",
         "pool": {
             "max": 5,
@@ -38,4 +38,4 @@
             "idle": 10000
         }
     }
-}
+};

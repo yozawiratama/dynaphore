@@ -1,12 +1,44 @@
 {
-    "default" : {
-        "path" : "/",
-        "module" : "home",
-        "action" : "landing" 
+    "home": {
+        "layout": "default",
+        "path": "/",
+        "module": {
+            "id": "mod.dynaphore.post",
+            "action": "post.feed"
+        },
+        "method" : "GET",
+        "title" : "Home",
+        "alias" : "home"
     },
-    "login" : {
-        "path" : "/login",
-        "module" : "user",
-        "action" : "login"
-    }
+    "login": {
+        "layout": "default",
+        "path": "/login",
+        "module": {
+            "id": "mod.dynaphore.user",
+            "action": "user.login"
+        },
+        "method" : "GET",
+        "title" : "Login",
+        "alias" : "login"
+    },
+    "loginSubmit": {
+        "path": "/login/submit",
+        "module": {
+            "id": "mod.dynaphore.user",
+            "action": "user.login.submit"
+        },
+        "method" : "POST",
+        "alias" : "login"
+    },
+    "register": {
+        "layout": "default",
+        "path": "/register",
+        "module": {
+            "id": "mod.dynaphore.user",
+            "action": "user.register"
+        },
+        "method" : "GET",
+        "title" : "Register",
+        "alias" : "register"
+    }   
 }

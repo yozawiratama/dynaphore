@@ -8,7 +8,7 @@ function handler(req, res) {
     res.end(
         dyna_tpl.compile(
             dyna_tpl.getLayout(),
-            fs.readFileSync(path_module.join(__dirname, 'register.html'), 'utf8'),
+            fs.readFileSync(path_module.join(__dirname, 'feed.html'), 'utf8'),
             {
                 pageTitle: 'Login'
             },
@@ -19,5 +19,5 @@ function handler(req, res) {
 }
 
 module.exports = function (module_holder, moduleid) {
-    module_holder[moduleid]['user.register'] = handler;
+    module_holder[moduleid]['post.feed'] = handler;
 };

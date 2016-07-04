@@ -1,40 +1,53 @@
 console.log('Getting Start ...');
 var finalhandler = require('finalhandler')
-var http         = require('http')
-var url          = require('url')
-var Router       = require('router')
+var http = require('http')
+var url = require('url')
+// var Router = require('router')
 var path_module = require('path');
 var fs = require('fs');
+var jsonfile = require('jsonfile');
+
+var app = require('./config/app');
+var template = require('./config/template');
+var router = require('./config/router');
+var database = require('./config/database');
+
+
+//config section
+var app = require('./config/app');
+
+console.log('Begin application : ' + app.name);
 
 console.log('Initialize Module');
-var module_holder = {}; 
+var moduleHolder = {};
 console.log('Initialize Router');
-var router = Router();
+// var router = Router();
+
 
 
 
 
 var Sequelize = require('sequelize');
 
-var sequelize = new Sequelize('DBSIMONEV', 'mistraldb', 'mistraldb.123#', {
-    host: 'mistralwebs.cloudapp.net',
-    dialect: 'mssql',
+// var sequelize = new Sequelize('DBSIMONEV', 'mistraldb', 'mistraldb.123#', {
+//     host: 'mistralwebs.cloudapp.net',
+//     dialect: 'mssql',
 
-    pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-    }
-});
+//     pool: {
+//         max: 5,
+//         min: 0,
+//         idle: 10000
+//     }
+// });
 
-sequelize
-    .authenticate()
-    .then(function (err) {
-        console.log('Connection has been established successfully.');
-    })
-    .catch(function (err) {
-        console.log('Unable to connect to the database:', err);
-    });
+// sequelize
+//     .authenticate()
+//     .then(function (err) {
+//         console.log('Connection has been established successfully.');
+//     })
+//     .catch(function (err) {
+//         console.log('Unable to connect to the database:', err);
+//     });
 
 function LoadModules(path, moduleid) {
     fs.lstat(path, function (err, stat) {
@@ -51,7 +64,7 @@ function LoadModules(path, moduleid) {
         } else {
             // we have a file: load it
             if (path_module.extname(path) == '.js')
-                require(path)(module_holder, moduleid);
+                require(path)(moduleHolder, moduleid);
         }
     });
 }
@@ -71,57 +84,22 @@ for (d in module_directories) {
     var moduleid = '';
     // console.log(fs.readFileSync(modjson, 'utf8'));
     var jdata = JSON.parse(fs.readFileSync(modjson, 'utf8'));
-    module_holder[jdata.id] = jdata;
-    module_holder[jdata.id]['view'] = {};
+    moduleHolder[jdata.id] = jdata;
+    moduleHolder[jdata.id]['view'] = {};
     LoadModules(DIR, jdata.id);
 
 }
 
-exports.module_holder = module_holder;
-
-// //post
-// router.get('/:ctrl?/:act?/:param?', function (req, res) {
-//   res.statusCode = 200
-//   res.setHeader('Content-Type', 'text/plain; charset=utf-8')
-//   console.log(req.params);
-//   if (req.params.ctrl == 'login') {
-//     module_holder['user.login'](req, res);
-//   }
-//   if (req.params.ctrl == 'register') {
-//     module_holder['user.register'](req, res);
-//   }
-//   if (req.params.ctrl) {
-//     if (req.params.act) {
-//       if (req.params.param) {
-//         res.end('controller : ' + req.params.ctrl + ' and action : ' + req.params.act + ' and param : ' + req.params.param)
-//       }
-//       else {
-//         res.end('controller : ' + req.params.ctrl + ' and action : ' + req.params.act)
-//       }
-//     } else {
-//       res.end('controller : ' + req.params.ctrl + ', but has no action')
-//     }
-//   } else {
-//     res.end('no controller or action')
-//   }
-// })
-
-
-
-// //post
-// router.post('/submit', function (req, res) {
-
-// });
+exports.moduleHolder = moduleHolder;
 
 var server = http.createServer(function (req, res) {
-  router(req, res, finalhandler(req, res));
+  // router(req, res, finalhandler(req, res));
   var url_parts = url.parse(req.url, true);
   var query = url_parts.query;
-  console.log(query);
-  console.log(url_parts);
-  module_holder['mod.dynaphore.user']['user.login'](req, res);
-  // console.log(req.url.split('?')[1]);
-  // console.log(getQueryString(req.url.split('?')[1]));
+  var route = router.get(url_parts.path, req.method);
+  console.log(req.method);
+  moduleHolder[route.module.id][route.module.action](req, res);
+  
 })
 
 

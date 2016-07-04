@@ -13,7 +13,7 @@ function LoadModules(path, moduleid) {
         } else {
             // we have a file: load it
             if (path_module.extname(path) == '.js')
-                require(path)(module_holder, moduleid);
+                require(path)(moduleHolder, moduleid);
         }
     });
 }
@@ -33,10 +33,10 @@ for (d in module_directories) {
     var moduleid = '';
     // console.log(fs.readFileSync(modjson, 'utf8'));
     var jdata = JSON.parse(fs.readFileSync(modjson, 'utf8'));
-    module_holder[jdata.id] = jdata;
-    module_holder[jdata.id]['view'] = {};
+    moduleHolder[jdata.id] = jdata;
+    moduleHolder[jdata.id]['view'] = {};
     LoadModules(DIR, jdata.id);
 
 }
 
-exports.module_holder = module_holder;
+exports.moduleHolder = moduleHolder;
